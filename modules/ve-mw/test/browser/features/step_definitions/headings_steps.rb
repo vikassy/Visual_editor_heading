@@ -1,5 +1,21 @@
 When(/^I click the down arrow on Headings interface$/) do
   on(VisualEditorPage).downarrow_element.when_present.click
+  screen_dir = "./screenshot"
+  FileUtils.mkdir_p screen_dir
+  # name = test_name(scenario).gsub(/ /, '_')
+  name="element_type"
+  path = "#{screen_dir}/#{name}.png"
+  $browser.screenshot.save path
+  location = $browser.element(:title, 'Format paragraph').wd.location #Start from here
+  height1 = $browser.element(:title, 'Format paragraph').wd.size.height #Consider height
+  padding_x = location.x
+  padding_y = location.y
+  size = $browser.element(:class, 'oo-ui-clippableElement-clippable').wd.size
+  width = size.width
+  height = size.height+height1
+  `convert #{screen_dir}/#{name}.png -crop #{width}x#{height}+#{padding_x}+#{padding_y} #{screen_dir}/cropped_img.png`
+  # puts $browser.element(:class, 'oo-ui-indicatedElement-indicator oo-ui-indicator-down').wd.size
+  # puts $browser.inspect
 end
 
 When(/^I click Paragraph$/) do
